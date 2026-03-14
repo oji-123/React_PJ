@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from "react"; // 追加
+import { useEffect, useState } from "react"; // 非同期処理を実行するためにuseEffectを追加
 
 function App() {
 
@@ -32,9 +32,29 @@ function App() {
     },
   ];
 
+  // 非同期で映画のリストを取得するAPIを実行
+  const fetchMovieList = async () => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/popular?language=ja&page=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+        },
+      }
+    );
+    const data = await response.json();
+    setMovieList(data.results);
+  };
+
   // キーボード入力値保持用の変数
   // keybordは状態を保持する変数、setKeywordは状態の変数を更新するためのメソッド名、useStateはReact Hooksの一種
   const [keyword, setKeyword] = useState("");
+  // 映画の検索結果を保持するための変数
+  const [movieList, setMovieList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchMovieList();
+  }, []);
 
   return (
     <div>
@@ -43,12 +63,14 @@ function App() {
       {/* 入力用テキストボックス */}
       <input type="text" onChange={(e) => setKeyword(e.target.value)} />
 
-      {defaultMovieList
-        .filter((movie) => movie.name.includes(keyword)) // 状態(keyboard)をもとに映画の名前をフィルタリング
+      {movieList
+        .filter((movie) => movie.original_title.includes(keyword)) // 状態(keyboard)をもとに映画の名前をフィルタリング
         .map((movie) => (
           <div key={movie.id}>
-            <h2>{movie.name}</h2>
-            <img src={movie.image} alt={movie.name} />
+            <h2>{movie.original_title}</h2>
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.original_title} />
             <p>{movie.overview}</p>
           </div>
         ))}
