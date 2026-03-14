@@ -1,4 +1,5 @@
 import './App.css'
+import { useState } from "react"; // 追加
 
 function App() {
 
@@ -31,15 +32,26 @@ function App() {
     },
   ];
 
+  // キーボード入力値保持用の変数
+  // keybordは状態を保持する変数、setKeywordは状態の変数を更新するためのメソッド名、useStateはReact Hooksの一種
+  const [keyword, setKeyword] = useState("");
+
   return (
     <div>
-      {defaultMovieList.map((movie) => (
-        <div key={movie.id}>
-          <h2>{movie.name}</h2>
-          <img src={movie.image} alt={movie.name} />
-          <p>{movie.overview}</p>
-        </div>
-      ))}
+
+      <div>{keyword}</div>
+      {/* 入力用テキストボックス */}
+      <input type="text" onChange={(e) => setKeyword(e.target.value)} />
+
+      {defaultMovieList
+        .filter((movie) => movie.name.includes(keyword)) // 状態(keyboard)をもとに映画の名前をフィルタリング
+        .map((movie) => (
+          <div key={movie.id}>
+            <h2>{movie.name}</h2>
+            <img src={movie.image} alt={movie.name} />
+            <p>{movie.overview}</p>
+          </div>
+        ))}
     </div>
   )
 }
