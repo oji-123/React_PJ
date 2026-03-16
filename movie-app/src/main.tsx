@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import MovieDetail from "./MovieDetail.tsx";
 import App from "./App";
+import Header from "./Header.tsx";
 
 // ルーティングの設定
 const router = createBrowserRouter([
@@ -13,6 +14,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Header>
+      <RouterProvider router={router} />
+    </Header>
   </StrictMode>
 );
