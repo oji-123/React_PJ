@@ -60,16 +60,27 @@ function App() {
 
   // 非同期で映画のリストを取得するAPIを実行
   const fetchMovieList = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?language=ja&page=1`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-        },
-      }
-    );
+    const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+    let url = "";
+    // キーワードが入力されている場合は検索APIを、そうでない場合は人気映画のAPIを呼び出す
+    if (keyword) {
+      url = `https://api.themoviedb.org/3/search/movie?query=${keyword}&include_adult=false&language=ja&page=1`;
+    } else {
+      url = "https://api.themoviedb.org/3/movie/popular?language=ja&page=1";
+    }
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    });
     const data = await response.json();
-    setMovieList(data.results);
+    const result = data.results;
+    const movieList = result.map((movie: MovieJson) => ({
+      id: movie.id,
+      original_title: movie.title,
+      poster_path: movie.poster_path,
+    }));
+    setMovieList(movieList);
   };
 
   // キーボード入力値保持用の変数
@@ -80,7 +91,7 @@ function App() {
 
   useEffect(() => {
     fetchMovieList();
-  }, []);
+  }, [keyword]); // keywordの状態が更新されるたびにfetchMovieList関数を呼び出す
 
   return (
     <div>
