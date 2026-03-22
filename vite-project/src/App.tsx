@@ -1,8 +1,9 @@
+import Title from "./components/Title"
+
 const App = () => {
   return (
     <div>
-      <h1 className="test">こんにちは</h1>
-      <h3>さようなら</h3>
+      <Title/>
     </div>
   )
 }
