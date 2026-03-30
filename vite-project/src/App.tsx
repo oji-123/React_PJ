@@ -27,7 +27,7 @@ const App = () => {
 
   const getWeather = (e: any) => {
     e.preventDefault();
-    fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=London&aqi=no`)
+    fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`)
       .then(res => res.json())
       .then(data => setResult({
         country: data.location.country,
