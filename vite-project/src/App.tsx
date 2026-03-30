@@ -25,7 +25,7 @@ const App = () => {
     icon: ""
   });
 
-  const getWeather = (e: any) => {
+  const getWeather = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`)
       .then(res => res.json())
@@ -39,10 +39,12 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Title />
-      <Form setCity={setCity} getWeather={getWeather} />
-      <Result result={result} />
+    <div className="wrapper">
+      <div className="container">
+        <Title />
+        <Form setCity={setCity} getWeather={getWeather} />
+        <Result result={result} />
+      </div>
     </div>
   )
 }
